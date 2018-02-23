@@ -7,5 +7,7 @@ const resolve = relativePath => path.resolve(cwd, relativePath);
 module.exports = {
   entryJs: resolve('src/index.js'),
   htmlTemplate: resolve('public/index.html'),
-  dist: resolve('dist')
-}
+  scssResources: resolve('src/styles/resources.scss'),
+  publicFiles: resolve('public'),
+  build: resolve('build'),
+};
