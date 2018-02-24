@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
+const path = require('path');
 const paths = require('./paths');
 
 module.exports = {
@@ -68,6 +70,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, '../src/sw.js'),
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.htmlTemplate,
