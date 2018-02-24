@@ -70,9 +70,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new ServiceWorkerWebpackPlugin({
-      entry: path.join(__dirname, '../src/sw.js'),
-    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.htmlTemplate,
@@ -87,7 +84,10 @@ module.exports = {
       to: paths.build,
       ignore: ['index.html'],
     }]),
-    new webpack.HotModuleReplacementPlugin(),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, '../src/sw.js')
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
     contentBase: paths.build,
