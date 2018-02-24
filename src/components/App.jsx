@@ -4,6 +4,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import classnames from 'classnames';
 import List from './List';
 import EmptyPage from './EmptyPage';
 import TabBar from './TabBar';
@@ -12,11 +13,19 @@ import ItemShow from './ItemShow';
 class App extends Component {
   state = {
     wines: [],
+    isOffline: false
   };
 
   componentDidMount() {
+    window.addEventListener('online', this.updateStatus);
+    window.addEventListener('offline', this.updateStatus);
+    this.updateStatus();
     this.getData();
   }
+
+  updateStatus = () => {
+    this.setState({ isOffline: !navigator.onLine });
+  };
 
   getData = () => {
     fetch('https://api-wine.herokuapp.com/api/v1/wines')
@@ -51,6 +60,11 @@ class App extends Component {
     return (
       <Router>
         <Fragment>
+          <div className={classnames('offline-status', {
+            'offline-status--visible': this.state.isOffline
+          })}>
+            You're offline bro :(
+          </div>
           {this.renderContent()}
         </Fragment>
       </Router>
