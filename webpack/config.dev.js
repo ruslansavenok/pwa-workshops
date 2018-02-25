@@ -93,7 +93,7 @@ module.exports = {
     contentBase: paths.build,
     compress: true,
     hot: true,
-    port: 4000,
+    port: 3000,
     historyApiFallback: true,
   },
 };
