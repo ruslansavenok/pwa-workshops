@@ -35,7 +35,7 @@ self.addEventListener('activate', event => {
 
 
 self.addEventListener('fetch', event => {
-  if (shouldIgnoreRequest(event.request)) {
+  if (shouldIgnoreRequest(event.request) || navigator.onLine) {
     return;
   }
 

@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   BrowserRouter as Router,
   Route,
@@ -23,6 +24,11 @@ class App extends Component {
     this.getData();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('online', this.updateStatus);
+    window.removeEventListener('offline', this.updateStatus);
+  }
+
   updateStatus = () => {
     this.setState({ isOffline: !navigator.onLine });
   };
@@ -36,21 +42,29 @@ class App extends Component {
 
   };
 
-  renderContent() {
+  renderContent(location) {
     if (!this.state.wines.length) {
       return <div />;
     }
 
     return (
       <Fragment>
-        <Switch>
-          <Route exact path="/" component={() => <List items={this.state.wines} />} />
-          <Route path="/wine/:id" component={() => <ItemShow items={this.state.wines} />} />
-          <Route path="/wishlist" component={EmptyPage} />
-          <Route path="/cellar" component={EmptyPage} />
-          <Route path="/articles" component={EmptyPage} />
-          <Route path="/profile" component={EmptyPage} />
-        </Switch>
+        <TransitionGroup>
+          <CSSTransition
+            key={location.key}
+            classNames="fade"
+            timeout={200}
+          >
+            <Switch location={location}>
+              <Route exact path="/" component={() => <List items={this.state.wines} />} />
+              <Route path="/wine/:id" component={() => <ItemShow items={this.state.wines} />} />
+              <Route path="/wishlist" component={EmptyPage} />
+              <Route path="/cellar" component={EmptyPage} />
+              <Route path="/articles" component={EmptyPage} />
+              <Route path="/profile" component={EmptyPage} />
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
         <TabBar />
       </Fragment>
     );
@@ -59,14 +73,18 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <Fragment>
-          <div className={classnames('offline-status', {
-            'offline-status--visible': this.state.isOffline
-          })}>
-            You're offline bro :(
-          </div>
-          {this.renderContent()}
-        </Fragment>
+        <Route
+          render={({ location }) => (
+            <Fragment>
+              <div className={classnames('offline-status', {
+                'offline-status--visible': this.state.isOffline
+              })}>
+                You're offline bro :(
+              </div>
+              {this.renderContent(location)}
+            </Fragment>
+          )}
+        />
       </Router>
     );
   }

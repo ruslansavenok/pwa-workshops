@@ -19,4 +19,43 @@ body {
   max-width: $container-width;
   margin: 0 auto;
   background-color: $background;
+
+  > div > * {
+    //position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.ItemShow {
+  z-index: 100;
+  background: #fff;
+
+  &.fade-enter,
+  &.fade-exit {
+    position: fixed;
+    transition: 200ms;
+  }
+
+  &.fade-enter {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  &.fade-enter.fade-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &.fade-exit {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &.fade-exit.fade-exit-active {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
